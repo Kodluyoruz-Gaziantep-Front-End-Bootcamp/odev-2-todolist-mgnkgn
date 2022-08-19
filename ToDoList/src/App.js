@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ListEl from "./components/ListEl";
 import Form from "./components/Form";
 import ListContainer from "./components/ListContainer";
@@ -11,6 +11,32 @@ function App() {
   const [todoEdit, setTodoEdit] = useState(null);
   const [editText, setEditText] = useState("");
   const [followEdit, setFollowEdit] = useState(false);
+
+  // Use Effect - Get from local
+  useEffect(() => {
+    getFromLocal();
+  }, []);
+
+  // Use Effect - Saving to local
+  useEffect(() => {
+    saveToLocal();
+  }, [objects]);
+
+  const saveToLocal = () => {
+    if (objects.length > 0)
+      localStorage.setItem("todo", JSON.stringify(objects));
+  };
+
+  const getFromLocal = () => {
+    if (localStorage.getItem("todo") === null) {
+      localStorage.setItem("todo", JSON.stringify([]));
+    } else {
+      let localTodo = JSON.parse(
+        localStorage.getItem("todo", JSON.stringify(objects))
+      );
+      setObjects(localTodo);
+    }
+  };
   return (
     <div className="App">
       <header className="App-header">TO DO LIST</header>
